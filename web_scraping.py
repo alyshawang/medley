@@ -110,41 +110,125 @@ def scrape_brandy_melville(category_url):
 def scrape_all_categories():
     # List of URLs for different Brandy Melville categories
     category_urls = [
-        "https://us.brandymelville.com/",
-        "https://www.brandymelvilleusa.com/collections/clothing",
-        "https://www.brandymelvilleusa.com/collections/basics",
-        "https://www.brandymelvilleusa.com/collections/graphics",
+        # "https://us.brandymelville.com/",
+        # "https://www.brandymelvilleusa.com/collections/clothing",
+        # "https://www.brandymelvilleusa.com/collections/basics",
+        # "https://www.brandymelvilleusa.com/collections/graphics",
         "https://www.brandymelvilleusa.com/collections/accessories"
         # Add more URLs for other categories if needed
     ]
 
-    # print("Brandy Melville Products:")
-    # for url in category_urls:
-    #     product_data = scrape_brandy_melville(url)
-    #     for product in product_data:
-    #         print(f"Title: {product['title']}")
-    #         print(f"Image URL: {product['image_url']}")
-    #         print("\n")
-
-    total_items_count = 0
-
+    print("Brandy Melville Products:")
     for url in category_urls:
         product_data = scrape_brandy_melville(url)
-        items_count = len(product_data)
-        total_items_count += items_count
+        for product in product_data:
+            print(f"Title: {product['title']}")
+            print(f"Image URL: {product['image_url']}")
+            print("\n")
 
-        print(f"Category URL: {url}")
-        print(f"Number of Items: {items_count}")
-        print("------------------------------")
+    # total_items_count = 0
+
+    # for url in category_urls:
+    #     product_data = scrape_brandy_melville(url)
+    #     items_count = len(product_data)
+    #     total_items_count += items_count
+
+    #     print(f"Category URL: {url}")
+    #     print(f"Number of Items: {items_count}")
+    #     print("------------------------------")
         
-        # Uncomment the lines below if you want to display the details of each item
-        # for product in product_data:
-        #     print(f"Title: {product['title']}")
-        #     print(f"Image URL: {product['image_url']}")
-        #     print("\n")
+    #     # Uncomment the lines below if you want to display the details of each item
+    #     # for product in product_data:
+    #     #     print(f"Title: {product['title']}")
+    #     #     print(f"Image URL: {product['image_url']}")
+    #     #     print("\n")
 
-    print(f"Total Number of Items Scraped: {total_items_count}")
+    # print(f"Total Number of Items Scraped: {total_items_count}")
 
+
+def scrape_ssense(category_url):
+    try:
+        options = ChromeOptions()
+        options.add_argument("--headless")  # Run Chrome in headless mode (without a visible window)
+        options.add_argument("--no-sandbox")  # Disable sandboxing for compatibility with some systems
+
+        # Set the path to the Chrome driver executable
+        # Download the driver that matches your Chrome browser version from: https://sites.google.com/a/chromium.org/chromedriver/downloads
+        driver_path = "/Users/alyshawang/Downloads/chromedriver"  # Replace with the actual path to the chromedriver executable
+
+        service = ChromeService(executable_path=driver_path)
+        driver = webdriver.Chrome(service=service, options=options)
+
+        headers = {'User-Agent': get_random_user_agent()}
+        driver.get(category_url)
+
+        # Wait for the page to load (you can increase the wait time if needed)
+        time.sleep(5)
+
+        # Get the page source after JavaScript rendering
+        page_source = driver.page_source
+        
+
+        scroll_to_end(driver)
+
+        prev_page_height = 0
+        new_page_height = driver.execute_script("return document.body.scrollHeight")
+
+        # Keep scrolling until no more new items are loaded
+        while prev_page_height != new_page_height:
+            prev_page_height = new_page_height
+            scroll_to_end(driver)
+            new_page_height = driver.execute_script("return document.body.scrollHeight")
+
+        # Get the final page source after loading all items
+        page_source = driver.page_source
+
+        soup = BeautifulSoup(page_source, "html.parser")
+
+        # Find the elements that contain product titles
+        product_tiles = soup.select(".plp-products__column")
+
+        # Extract and store the product titles and image URLs in separate lists
+        product_data = []
+
+        for tile in product_tiles:
+            title_element = tile.select_one(".product-tile__description")
+            image_element = tile.select_one(".product-tile__image source[srcset]")
+
+            if title_element and image_element:
+                title_text = title_element.text.strip()
+                image_url = "https:" + image_element.get("srcset")
+                if image_url:
+                    image_url = image_url.split(", ")[-1].split(" ")[0]
+
+                product_data.append({"title": title_text, "image_url": image_url})
+
+        # print(product_data)  # Print the product data for debugging purposes
+
+        return product_data
+
+    except Exception as e:
+        print(f"Error while fetching Brandy Melville data: {e}")
+        return []
+
+def scrape_all_ssense():
+    # List of URLs for different Brandy Melville categories
+    category_urls = [
+        # "https://us.brandymelville.com/",
+        # "https://www.brandymelvilleusa.com/collections/clothing",
+        # "https://www.brandymelvilleusa.com/collections/basics",
+        # "https://www.brandymelvilleusa.com/collections/graphics",
+        "https://www.ssense.com/en-ca/women"
+        # Add more URLs for other categories if needed
+    ]
+
+    print("SSENSE Products:")
+    for url in category_urls:
+        product_data = scrape_ssense(url)
+        for product in product_data:
+            print(f"Title: {product['title']}")
+            print(f"Image URL: {product['image_url']}")
+            print("\n")
 
 def scrape_urban_outfitters():
     try:
@@ -269,7 +353,8 @@ def scrape_urban_outfitters():
 
 
 if __name__ == "__main__":
-    scrape_all_categories()
+    # scrape_all_categories()
+    scrape_all_ssense()
 
     # print("\nUrban Outfitters Products:")
     # product_data = scrape_urban_outfitters()
