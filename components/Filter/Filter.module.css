@@ -1,0 +1,49 @@
+@font-face {
+  font-family: "Inter-Variable";
+  src: url("../../public/Inter-VariableFont_slnt,wght.ttf") format("truetype");
+  font-weight: 300 400 500 600 700 800 900;
+  font-display: swap;
+  font-style: normal;
+}
+
+.sidebar {
+  /* width: 450px; */
+  font-family: "Inter-Variable";
+  border: 1px solid #ccc;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* center items horizontally */
+}
+
+.dropdown {
+  width: 200px;
+}
+.filter {
+  background-color: #f4eced;
+  font-weight: 700;
+  padding-top: 20px;
+  font-size: 20px;
+  width: 250px;
+  height: 700px;
+  padding-left: 40px;
+}
+
+.customDropdown {
+  width: 200px; 
+  padding: 8px; 
+  margin-top: 5px;
+  border: 1px solid #ccc; 
+  border-radius: 5px;
+  background-color: #fff;
+  margin-bottom: 10px;
+  font-family: "Inter-Variable";
+  font-weight: 500;
+}
+
+.sort {
+  margin-top: 30px; 
+  font-weight: 700;
+  font-size: 20px;
+  margin-bottom: 60px;
+}

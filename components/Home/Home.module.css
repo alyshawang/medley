@@ -1,0 +1,122 @@
+@font-face {
+  font-family: "Inter-Variable";
+  src: url("../../public/Inter-VariableFont_slnt,wght.ttf") format("truetype");
+  font-weight: 300 400 500 600 700 800 900;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Manrope-Variable";
+  src: url("../../public/Manrope-VariableFont_wght.ttf") format("truetype");
+  font-weight: 300 400 500 600 700 800 900;
+  font-display: swap;
+  font-style: normal;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* display 4 products per row */
+}
+
+.item {
+  border: 1px solid #ccc;
+  padding: 20px;
+  /* text-align: center; */
+  position: relative;
+}
+
+.item a {
+  text-decoration: none; 
+  color: black; 
+}
+
+.image {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.title {
+  font-family: "Inter-Variable";
+  font-size: 15px;
+  margin-top: 10px;
+  font-weight: 550;
+  color: gray;
+}
+
+.price {
+  font-family: "Inter-Variable";
+  /* color: #555; */
+  font-size: 20px;
+  font-weight: 600;
+  background-color: #ffe5e7;
+  display: inline-block; /* ensures the background color only covers the text width */
+  padding: 5px 10px;
+  margin-bottom: 5px;
+}
+
+.container {
+  display: flex;
+}
+
+.topBar {
+  height: 65px;
+  font-family: "Inter-Variable";
+  font-size: 50px;
+  margin-top: 0px;
+  margin-bottom: 20px;
+  color: lightgrey;
+  margin-left: 300px;
+}
+
+.brand {
+  font-weight: bold;
+  font-family: "Inter-Variable";
+  font-size: 25px;
+  margin-bottom: 0px;
+  margin-top: 10px;
+}
+
+.priceContainer {
+  text-align: right;
+}
+
+.item:hover {
+  background-color: #fff6f7;
+}
+.lowPrice {
+  background-color: #ffe5e7; 
+}
+
+.mediumPrice {
+  background-color: #ffb2b7;
+}
+
+.highPrice {
+  background-color: #ff8c94; 
+}
+
+.veryHighPrice {
+  background-color: #ff5c67; 
+}
+
+.price {
+  font-family: "Inter-Variable";
+  color: #555;
+  font-size: 20px;
+  font-weight: 600;
+  display: inline-block;
+  padding: 5px 10px;
+}
+
+.logo {
+  height: 30px;
+  width: auto;
+  margin-bottom: 20px;
+  padding-left: 20px;
+  margin-top: 10px;
+}
