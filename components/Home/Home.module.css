@@ -71,8 +71,14 @@
   margin-bottom: 20px;
   color: lightgrey;
   margin-left: 300px;
+  font-weight: 600;
+  border: none; 
+
 }
 
+.darkText{
+    color: #555;
+}
 .brand {
   font-weight: bold;
   font-family: "Inter-Variable";

@@ -8,6 +8,10 @@ import S from "../../public/S.svg";
 
 function HomePage() {
   const [data, setData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState(""); 
+  const [sortOption, setSortOption] = useState("");
+  const [brandOption, setBrandOption] = useState(""); 
+  const [priceRange, setPriceRange] = useState("");
 
   useEffect(() => {
     fetchDataFromBackend();
@@ -37,18 +41,95 @@ function HomePage() {
     }
   }
 
+  const filteredData = data.filter((item) =>
+    item.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const inputStyles = searchTerm
+    ? `${styles.topBar} ${styles.darkText}`
+    : styles.topBar;
+
+  const handleSortChange = (value) => {
+    setSortOption(value);
+  };
+  const handleBrandChange = (brand) => {
+    setBrandOption(brand);
+  };
+  const handlePriceRangeChange = (range) => {
+    setPriceRange(range);
+  };
+
+  let sortedData = [...filteredData];
+
+  if (sortOption === "lowestToHighest") {
+    sortedData.sort((a, b) => {
+      const priceA = parseFloat(a.price.replace(/[$,]/g, ""));
+      const priceB = parseFloat(b.price.replace(/[$,]/g, ""));
+
+      if (!isNaN(priceA) && !isNaN(priceB)) {
+        return priceA - priceB;
+      } else if (!isNaN(priceA)) {
+        return -1;
+      } else if (!isNaN(priceB)) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+  } else if (sortOption === "highestToLowest") {
+    sortedData.sort((a, b) => {
+      const priceA = parseFloat(a.price.replace(/[$,]/g, ""));
+      const priceB = parseFloat(b.price.replace(/[$,]/g, ""));
+
+      if (!isNaN(priceA) && !isNaN(priceB)) {
+        return priceB - priceA;
+      } else if (!isNaN(priceA)) {
+        return -1;
+      } else if (!isNaN(priceB)) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+  }
+
+  if (brandOption) {
+    sortedData = sortedData.filter((item) => item.brand === brandOption);
+  }
+  if (priceRange) {
+    const [minPrice, maxPrice] = priceRange.split("-");
+    sortedData = sortedData.filter((item) => {
+      const numericPrice = parseFloat(item.price.replace(/[$,]/g, ""));
+      return (
+        numericPrice >= parseFloat(minPrice) &&
+        numericPrice <= parseFloat(maxPrice)
+      );
+    });
+  }
+
   return (
     <div>
       <div>
         <Image className={styles.logo} src={BM} />
         <Image className={styles.logo} src={S} />
       </div>
-      <h1 className={styles.topBar}>Search...</h1>
+      {/* <h1 className={styles.topBar}>Search...</h1> */}
+      <input
+        type="text"
+        placeholder="Search..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className={inputStyles}
+      />
       <div className={styles.container}>
-        <Filter />
+        <Filter
+          onSortChange={handleSortChange}
+          onBrandChange={handleBrandChange}
+          onPriceRangeChange={handlePriceRangeChange}
+        />
 
         <div className={styles.grid}>
-          {data.map((item) => (
+          {sortedData.map((item) => (
             <div className={styles.item} key={item.image_url}>
               <Link href={`${item.link}`} target="_blank">
                 <p className={styles.brand}>{item.brand}</p>

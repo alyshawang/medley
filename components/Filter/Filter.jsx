@@ -1,11 +1,24 @@
 import React, { useState } from "react";
 import styles from "./Filter.module.css";
 
-function FilterBar() {
-  const [selectedOption, setSelectedOption] = useState(""); // state to store the selected option
+function FilterBar({ onSortChange, onBrandChange, onPriceRangeChange }) {
+  const [selectedOption, setSelectedOption] = useState(""); 
+  const [selectedBrandOption, setSelectedBrandOption] = useState("");
+  const [selectedPriceRange, setSelectedPriceRange] = useState("");
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value); // update the selected option when it changes
+    onSortChange(event.target.value); // notify the parent component of the sort change
+  };
+
+  const handleBrandChange = (event) => {
+    setSelectedBrandOption(event.target.value);
+    onBrandChange(event.target.value);
+  };
+
+  const handlePriceRangeChange = (event) => {
+    setSelectedPriceRange(event.target.value);
+    onPriceRangeChange(event.target.value);
   };
 
   return (
@@ -27,8 +40,8 @@ function FilterBar() {
           className={styles.customDropdown}
         >
           <option value="">By Price</option>
-          <option value="option1">Option 1</option>
-          <option value="option2">Option 2</option>
+          <option value="lowestToHighest">Lowest to Highest</option>
+          <option value="highestToLowest">Highest to Lowest</option>
         </select>
       </div>
       {/* Dropdown menu */}
@@ -38,19 +51,19 @@ function FilterBar() {
           <br></br>
           <select
             id="filterDropdown"
-            value={selectedOption}
-            onChange={handleOptionChange}
+            value={selectedBrandOption}
+            onChange={handleBrandChange}
             className={styles.customDropdown}
           >
             <option className={styles.dropdown} value="">
               Brand
             </option>
-            <option value="option1">Brandy Melville</option>
-            <option value="option2">Stussy</option>
+            <option value="Brandy Melville">Brandy Melville</option>
+            <option value="Stussy">STUSSY</option>
           </select>
           <br></br>
 
-          <select
+          {/* <select
             id="filterDropdown"
             value={selectedOption}
             onChange={handleOptionChange}
@@ -62,19 +75,21 @@ function FilterBar() {
             <option value="option1">Brandy Melville</option>
             <option value="option2">Stussy</option>
           </select>
-          <br></br>
+          <br></br> */}
 
           <select
             id="filterDropdown"
-            value={selectedOption}
-            onChange={handleOptionChange}
+            value={selectedPriceRange}
+            onChange={handlePriceRangeChange}
             className={styles.customDropdown}
           >
             <option className={styles.dropdown} value="">
               Price Range
             </option>
-            <option value="option1">Brandy Melville</option>
-            <option value="option2">Stussy</option>
+            <option value="0-20">0-20</option>
+            <option value="20-50">20-50</option>
+            <option value="50-100">50-100</option>
+            <option value="100-300">100+</option>
           </select>
         </div>
       </div>
